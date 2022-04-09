@@ -1,38 +1,31 @@
+/*
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
 #include <ESP32Servo.h>
 
-//uint8_t Adresse_Mac[] = {0xE8, 0x68, 0xE7, 0x30, 0x54, 0xDC};
-bool Appel = false;
-esp_err_t Status_recv;
 int Val;
 //uint8_t ValRecue;
-uint8_t My_Data = 1;
+uint8_t My_Data = 0;
 Servo esc; //Creating a servo class with name as esc
 
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
 {
-  Appel = true;
-
-    
-    memcpy(&My_Data, incomingData,sizeof(My_Data));
-
-  
+  memcpy(&My_Data, incomingData,sizeof(My_Data));
  // ValRecue = My_Data;
 
 }
 
 void setup() {
   // put your setup code here, to run once:
-  Val = 1500;
+  Val = 1000;
   Serial.begin(115200);
 
   WiFi.mode(WIFI_STA);
 
   esp_now_init();
 
-  Status_recv = esp_now_register_recv_cb(OnDataRecv);
+  esp_now_register_recv_cb(OnDataRecv);
 
   
   esc.attach(5); //Specify the esc signal pin,Here as D8
@@ -69,43 +62,28 @@ void loop() {
   switch (My_Data)
   {
   case 0:
-    if(Val<2000 && Appel == true)
+    if(Val<2000)
     {
       Val++;
-      delay(10);
-
     }
-    else
-      My_Data = 255;
     break;
 
   case 1:
-    if (Val >1500 && Appel == true)
+    if (Val >1000)
     {
-      //Val--;
-      Val = Val;
-
+      Val--;
     }
-    else
-      My_Data = 255;
     break;
 
   case 255:
-
-    if (Val > 1500)
-    {
-    Val --;
-    delay (5);
-    }
+    /* code 
     break;
 
   default:
-
     break;
   }
   esc.writeMicroseconds(Val); //using ValRecue as the signal to esc
-  Appel = false;
-  //My_Data = 255;
-  delay(50);
-  Serial.println(Val);
+  
+  //Serial.println(Val);
 }
+*/
